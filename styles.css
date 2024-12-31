@@ -1,0 +1,21 @@
+body {
+  height: 100dvh;
+  width: 100dvw;
+  background-color: gray;
+}
+
+#bookshelf {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card {
+  border: 1px solid black;
+  padding: 10px;
+  min-height: 100px;
+  width: clamp(200px, 10%, 500px);
+  background-color: lightgray;
+  border-radius: 5px;
+}
