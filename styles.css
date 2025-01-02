@@ -12,10 +12,42 @@ body {
 }
 
 .card {
-  border: 1px solid black;
+  border: 3px solid black;
   padding: 10px;
   min-height: 100px;
   width: clamp(200px, 10%, 500px);
   background-color: lightgray;
   border-radius: 5px;
+}
+
+.read {
+  border-color: lightgreen;
+}
+
+.not-read {
+  border-color: lightcoral;
+}
+
+#form-wrapper {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid black;
+
+  #new-book-form {
+    display: table;
+
+    .input-group {
+      display: table-row;
+    }
+
+    label,
+    input {
+      display: table-cell;
+      margin-bottom: 10px;
+    }
+
+    label {
+      padding-right: 10px;
+    }
+  }
 }
