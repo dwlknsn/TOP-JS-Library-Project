@@ -48,7 +48,16 @@ function addBookToUI(book, id) {
 }
 
 const addBookButton = document.querySelector("#add-book-button")
+const newBookFormContainer = document.querySelector("#new-book-form-container")
 const newBookForm = document.querySelector("#new-book-form")
+
+addBookButton.addEventListener("click", (event) => {
+  console.log("clicked")
+  event.preventDefault;
+  newBookFormContainer.classList.toggle("hidden");
+  addBookButton.classList.toggle("hidden");
+})
+
 
 newBookForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -57,4 +66,6 @@ newBookForm.addEventListener("submit", (event) => {
   addBookToLibrary(book);
   addBookToUI(book, `book-${myLibrary.indexOf(book) + 1}`);
   newBookForm.reset();
+  newBookFormContainer.classList.toggle("hidden");
+  addBookButton.classList.toggle("hidden");
 })

@@ -28,7 +28,7 @@ body {
   border-color: lightcoral;
 }
 
-#form-wrapper {
+#new-book-form-container {
   padding: 10px;
   margin: 10px;
   border: 1px solid black;
@@ -50,4 +50,8 @@ body {
       padding-right: 10px;
     }
   }
+}
+
+.hidden {
+  display: none;
 }
