@@ -34,9 +34,11 @@ function Library(books = []) {
     return this.books.push(book);
   }
   this.removeBook = function(id) {
-    console.log(id, this);
     const index = this.books.map((book) => { return book.id }).indexOf(id);
     return this.books.splice(index, 1);
+  }
+  this.findBook = function(id) {
+    return this.books.find((element) => element.id == id );
   }
 }
 
@@ -53,41 +55,43 @@ function createBook(title, author, pageCount, readStatus) {
 const bookshelf = document.querySelector("#bookshelf")
 const bookTemplate = document.querySelector("#book-template")
 
-function addBookToUI(book, id) {
+function addBookToUI(book) {
   const newCard = bookTemplate.content.cloneNode(true);
   newCard.querySelector(".book-title").textContent = book.title;
   newCard.querySelector(".book-author").textContent = book.author;
   newCard.querySelector(".book-page-count").textContent = `${book.pageCount} Pages`;
   newCard.querySelector(".book-read-status").textContent = `${book.readStatus ? "already read" : "not read yet"}`;
-  newCard.querySelector(".card").classList.add(book.readStatus ? "read" : "not-read");
+  if (book.readStatus) { newCard.querySelector(".card").classList.add("read"); }
   newCard.querySelector(".card").id = `book-${book.id}`;
 
   bookshelf.appendChild(newCard);
-  const element = document.querySelector(`#book-${book.id} > button`)
-  element.dataset.bookId = book.id;
+
+  // Set data attributes for future interactions
+  const card = document.querySelector(`#book-${book.id}`);
+  const buttons = card.querySelectorAll("button")
+  buttons.forEach((button) => { button.dataset.bookId = book.id; })
+
+  // Add event listeners when constructing, so that new book elements added via
+  // the form also have the interactive functionality
+  const removeBookButton = card.querySelector(".remove-book")
+  removeBookButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    deleteBook(book.id);
+  });
+
+  const toggleReadStatusButton = card.querySelector(".toggle-read-status")
+  toggleReadStatusButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    toggleReadStatus(book.id);
+  });
 }
 
-const addBookButton = document.querySelector("#add-book-button")
 const newBookFormContainer = document.querySelector("#new-book-form-container")
-const newBookForm = document.querySelector("#new-book-form")
 
-function toggleForm(){
+function toggleFormVisibility(){
   newBookFormContainer.classList.toggle("hidden");
-  addBookButton.classList.toggle("hidden");
+  showBookFormButton.classList.toggle("hidden");
 }
-
-addBookButton.addEventListener("click", (event) => {
-  event.preventDefault;
-  toggleForm();
-})
-
-newBookForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const formData = new FormData(newBookForm);
-  createBook(...formData.values());
-  newBookForm.reset();
-  toggleForm();
-})
 
 
 // // // // // // // // // //
@@ -104,16 +108,18 @@ function removeBookFromUI(id) {
   element.remove()
 }
 
-const removeBookButtons = document.querySelectorAll(".remove-book");
+// // // // // // // // // //
+// Functionality for toggling read status
+// // // // // // // // // //
 
-removeBookButtons.forEach(element => {
-  element.addEventListener("click", (event) => {
-    event.preventDefault();
-    const id = element.getAttribute("data-book-id")
-    deleteBook(id);
-  })
-});
+function toggleReadStatus(id) {
+  const book = myLibrary.findBook(id);
+  book.toggleReadStatus()
 
+  const bookCard = bookshelf.querySelector(`#book-${id}`);
+  bookCard.classList.toggle("read");
+  bookCard.querySelector(".book-read-status").textContent = `${book.readStatus ? "already read" : "not read yet"}`;
+}
 
 
 // // // // // // // // // //
@@ -133,6 +139,26 @@ const bookData = [
   ["DCC #7 - This Inevitable Ruin", "Matt Dinniman", 724, false],
 ]
 
-bookData.forEach(element => {
-  createBook(element[0], element[1], element[2], element[3]);
-});
+bookData.forEach((element) => { createBook(element[0], element[1], element[2], element[3]); });
+
+
+// // // // // // // // // //
+// Event listeners
+// // // // // // // // // //
+
+const showBookFormButton = document.querySelector("#show-book-form-button")
+
+showBookFormButton.addEventListener("click", (event) => {
+  event.preventDefault;
+  toggleFormVisibility();
+})
+
+const newBookForm = document.querySelector("#new-book-form")
+
+newBookForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const formData = new FormData(newBookForm);
+  createBook(...formData.values());
+  newBookForm.reset();
+  toggleFormVisibility();
+})
