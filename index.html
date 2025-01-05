@@ -9,7 +9,17 @@
 </head>
 <body>
 
-  <div id="bookshelf"></div>
+  <div id="bookshelf">
+    <template id="book-template">
+      <div class="card">
+        <h4 class="book-title">Title</h4>
+        <div class="book-author">Author</div>
+        <div class="book-page-count">Page Count</div>
+        <div class="book-read-status">Read Status</div>
+        <button class="remove-book">Remove</button>
+      </div>
+    </template>
+  </div>
   <button id="add-book-button">Add Book</button>
   <div id="new-book-form-container" class="hidden">
 
